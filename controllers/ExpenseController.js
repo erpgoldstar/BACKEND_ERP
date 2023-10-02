@@ -1,37 +1,19 @@
 const Zone = require("../models/ZoneModel");
 const Expense = require("../models/ExpenseModel");
+const { paginationController } = require("./paginationController");
 
 const getExpenses = async (req, res) => {
   try {
     const { zoneSlug, category } = req.params;
     const page = parseInt(req.query.page);
+
     const expenses = await Expense.find({
       zoneSlug,
       categoryName: category,
     }).sort({ createdAt: -1 });
-    const limit = 10;
 
-    const startIndex = (page - 1) * limit;
-    const endIndex = page * limit;
-
-    const results = {};
-    results.totalExpenses = expenses.length;
-    results.pageCount = Math.ceil(expenses.length / limit);
-
-    if (endIndex < expenses.length) {
-      results.next = {
-        page: page + 1,
-        limit: limit,
-      };
-    }
-    if (startIndex > 0) {
-      results.prev = {
-        page: page - 1,
-        limit: limit,
-      };
-    }
-    results.expensesResult = expenses.slice(startIndex, endIndex);
-    res.json(results);
+    const expensesResult = paginationController(expenses, page);
+    res.json(expensesResult);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }

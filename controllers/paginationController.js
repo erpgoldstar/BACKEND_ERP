@@ -9,6 +9,10 @@ const paginationController = (model, page) => {
 
   results.totalPages = Math.ceil(model.length / limit);
 
+  results.currentPage = page;
+
+  results.totalItems = model.length;
+
   if (startIndex > 0) {
     results.prev = {
       page: page - 1,

@@ -5,12 +5,16 @@ const {
   createEmployee,
   deleteEmployee,
   updateEmployee,
+  getAllEmployees,
 } = require("../controllers/EmployeeController");
 
 const router = express.Router();
 
-// GET all workouts
+// GET paginated workouts
 router.get("/", getEmployees);
+
+// Get all employees
+router.get("/allemployees", getAllEmployees);
 
 // GET a single workout
 router.get("/:id", getEmployee);

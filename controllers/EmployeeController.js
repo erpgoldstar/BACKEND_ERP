@@ -11,6 +11,15 @@ const getEmployees = async (req, res) => {
   res.json(results);
 };
 
+const getAllEmployees = async (req, res) => {
+  try {
+    const employees = await EmployeeModel.find().sort({ createdAt: -1 });
+    res.status(200).json(employees);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
 // get a single workout
 const getEmployee = async (req, res) => {
   const { id } = req.params;
@@ -83,6 +92,7 @@ const updateEmployee = async (req, res) => {
 
 module.exports = {
   getEmployees,
+  getAllEmployees,
   getEmployee,
   createEmployee,
   deleteEmployee,
