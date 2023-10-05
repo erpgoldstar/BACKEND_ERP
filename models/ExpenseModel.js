@@ -7,7 +7,7 @@ const expenseSchema = new mongoose.Schema(
     zoneSlug: { type: String, required: true },
     categoryName: { type: String, required: true },
     empName: { type: String, required: true },
-    description: { type: String, required: true },
+    eDescription: { type: String, required: true },
     type: { type: String, required: true },
     salary: { type: Number, required: true },
   },

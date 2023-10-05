@@ -6,6 +6,7 @@ const {
   deleteEmployee,
   updateEmployee,
   getAllEmployees,
+  getEmployeeBySearch,
 } = require("../controllers/EmployeeController");
 
 const router = express.Router();
@@ -15,6 +16,8 @@ router.get("/", getEmployees);
 
 // Get all employees
 router.get("/allemployees", getAllEmployees);
+
+router.get("/search", getEmployeeBySearch);
 
 // GET a single workout
 router.get("/:id", getEmployee);

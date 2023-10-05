@@ -11,6 +11,17 @@ const getEmployees = async (req, res) => {
   res.json(results);
 };
 
+const getEmployeeBySearch = async (req, res) => {
+  try {
+    const { searchQuery } = req.query;
+    const name = new RegExp(searchQuery, "i");
+    const emp = await EmployeeModel.find({ name });
+    res.json(emp);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
 const getAllEmployees = async (req, res) => {
   try {
     const employees = await EmployeeModel.find().sort({ createdAt: -1 });
@@ -94,6 +105,7 @@ module.exports = {
   getEmployees,
   getAllEmployees,
   getEmployee,
+  getEmployeeBySearch,
   createEmployee,
   deleteEmployee,
   updateEmployee,
