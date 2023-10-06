@@ -1,5 +1,9 @@
-GET http://localhost:4000/api/expenses/gold-star-3/New%20Tea/search?searchQuery=Yoga Shanthi
+# GET http://localhost:4000/api/expenses/gold-star-3/New%20Tea/search?searchQuery=Yoga Shanthi
 
 
 // employees
 # GET http://localhost:4000/api/employees/search?searchQuery=
+
+// salaries
+# GET http://localhost:4000/api/salaries
+PATCH http://localhost:4000/api/salaries/651fb83fec4155786d148f39/500

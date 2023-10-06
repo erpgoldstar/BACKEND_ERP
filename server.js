@@ -7,6 +7,7 @@ const dataRoutes = require("./routes/dataRoutes");
 const emoloyeeRoutes = require("./routes/employeeRoutes");
 const zoneRoutes = require("./routes/zoneRoutes");
 const zoneDetailsRoutes = require("./routes/zoneDetailsRoutes");
+const salaryRoutes = require("./routes/salaryRoutes");
 
 // express app
 const app = express();
@@ -25,6 +26,7 @@ app.use((req, res, next) => {
 app.use("/api/employees", emoloyeeRoutes);
 app.use("/api/zones", zoneRoutes);
 app.use("/api/zone-details", zoneDetailsRoutes);
+app.use("/api/salaries", salaryRoutes);
 
 // connect to db
 mongoose

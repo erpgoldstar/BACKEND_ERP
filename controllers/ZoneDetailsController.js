@@ -1,6 +1,7 @@
 const Zone = require("../models/ZoneModel");
 const Expense = require("../models/ExpenseModel");
 const Income = require("../models/IncomeModel");
+const Salary = require("../models/SalaryModel");
 const { paginationController } = require("./paginationController");
 
 const getZoneDetails = async (req, res) => {
@@ -84,6 +85,7 @@ const createZoneDetails = async (req, res) => {
 
     if (type === "Expense") {
       const { categoryName, empName, eDescription, type, salary } = req.body;
+
       const expense = new Expense({
         zoneId: zone._id,
         zoneSlug: zone.name,
@@ -94,7 +96,32 @@ const createZoneDetails = async (req, res) => {
         salary,
       });
 
+      const existingSalary = await Salary.findOne({
+        zoneSlug: zone.name,
+        categoryName,
+        empName,
+      });
+
+      if (!existingSalary) {
+        const empSalary = new Salary({
+          zoneSlug: zone.name,
+          categoryName,
+          empName,
+          salary,
+        });
+
+        await empSalary.save();
+      } else {
+        let oldSal = existingSalary.salary;
+        await Salary.findOneAndUpdate(
+          existingSalary,
+          { salary: (oldSal += salary) },
+          { new: true }
+        );
+      }
+
       await expense.save();
+
       res.status(201).json(expense);
     } else {
       const { categoryName, resource, iDescription, type, amount } = req.body;
