@@ -74,6 +74,28 @@ const getZoneDetailsBySearch = async (req, res) => {
   }
 };
 
+const getTotalZoneExpensesAndIncomes = async (req, res) => {
+  try {
+    const { zoneSlug } = req.params;
+    const expenses = await Expense.find({ zoneSlug });
+    const incomes = await Income.find({ zoneSlug });
+
+    const getAllSalaries = expenses.map((exp) => exp.salary);
+    const totalExpenses = getAllSalaries.reduce((accumulator, currentValue) => {
+      return accumulator + currentValue;
+    }, 0);
+
+    const getAllIncomes = incomes.map((inc) => inc.amount);
+    const totalIncomes = getAllIncomes.reduce((acc, cur) => {
+      return acc + cur;
+    }, 0);
+
+    res.status(200).json({ totalExpenses, totalIncomes });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
 const createZoneDetails = async (req, res) => {
   try {
     const { zoneId, type } = req.body;
@@ -96,11 +118,7 @@ const createZoneDetails = async (req, res) => {
         salary,
       });
 
-      const existingSalary = await Salary.findOne({
-        zoneSlug: zone.name,
-        categoryName,
-        empName,
-      });
+      const existingSalary = await Salary.findOne({ empName });
 
       if (!existingSalary) {
         const empSalary = new Salary({
@@ -174,6 +192,17 @@ const deleteZoneDetails = async (req, res) => {
       const deletedDetails = await Expense.findByIdAndRemove(
         expenseDetails._id
       );
+
+      const decrSal = await Salary.findOne({
+        empName: expenseDetails.empName,
+        zoneSlug: expenseDetails.zoneSlug,
+        categoryName: expenseDetails.categoryName,
+      });
+
+      await Salary.findByIdAndUpdate(decrSal._id, {
+        salary: decrSal.salary - expenseDetails.salary,
+      });
+
       res.status(200).json(deletedDetails);
     }
 
@@ -189,6 +218,7 @@ const deleteZoneDetails = async (req, res) => {
 module.exports = {
   getZoneDetails,
   getZoneDetailsBySearch,
+  getTotalZoneExpensesAndIncomes,
   createZoneDetails,
   editzZoneDetails,
   deleteZoneDetails,

@@ -1,9 +1,23 @@
 const Salary = require("../models/SalaryModel");
+const { paginationController } = require("./paginationController");
 
 const getSalaries = async (req, res) => {
   try {
+    const page = parseInt(req.query.page);
     const salaries = await Salary.find();
-    res.status(200).json(salaries);
+    const salResults = paginationController(salaries, page);
+    res.status(200).json(salResults);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+const getSalariesBySearch = async (req, res) => {
+  try {
+    const { searchQuery } = req.query;
+    const empName = new RegExp(searchQuery, "i");
+    const salary = await Salary.find({ empName });
+    res.json(salary);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
@@ -24,4 +38,4 @@ const withdraw = async (req, res) => {
   }
 };
 
-module.exports = { getSalaries, withdraw };
+module.exports = { getSalaries, withdraw, getSalariesBySearch };
