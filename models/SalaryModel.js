@@ -6,6 +6,10 @@ const salarySchema = new mongoose.Schema(
     zoneSlug: { type: String, required: true },
     categoryName: { type: String, required: true },
     salary: { type: Number, required: true },
+    lastWithdrawals: {
+      date: { type: Date, default: Date.now },
+      amount: { type: Number, default: 0 },
+    },
   },
   { timestamps: true }
 );

@@ -127,13 +127,14 @@ const createZoneDetails = async (req, res) => {
           empName,
           salary,
         });
-
         await empSalary.save();
       } else {
         let oldSal = existingSalary.salary;
         await Salary.findOneAndUpdate(
           existingSalary,
-          { salary: (oldSal += salary) },
+          {
+            salary: (oldSal += salary),
+          },
           { new: true }
         );
       }

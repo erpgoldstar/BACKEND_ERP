@@ -29,7 +29,10 @@ const withdraw = async (req, res) => {
     const sal = await Salary.findById(id);
     const updated = await Salary.findByIdAndUpdate(
       id,
-      { salary: (sal.salary -= amount) },
+      {
+        salary: (sal.salary -= amount),
+        lastWithdrawals: { date: new Date(), amount },
+      },
       { new: true }
     );
     res.send(updated);
