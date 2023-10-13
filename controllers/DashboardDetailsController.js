@@ -16,7 +16,7 @@ const getTotalExpensesAndIncomes = async (req, res) => {
       return acc + cur;
     }, 0);
 
-    res.status(200).json({ totalExpenses, totalIncomes, expenses });
+    res.status(200).json({ totalExpenses, totalIncomes, expenses, incomes });
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
